@@ -32,5 +32,18 @@
 if('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js', { scope: '/' });
 }
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    // Registrar el SW original (cache-first)
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => console.log('SW principal (cache-first) registrado:', reg.scope))
+      .catch(err => console.error('Error registrando sw.js:', err));
+
+    // Registrar el nuevo SW dinámico (network-first)
+    navigator.serviceWorker.register('/sw-dynamic.js')
+      .then(reg => console.log('SW dinámico (network-first) registrado:', reg.scope))
+      .catch(err => console.error('Error registrando sw-dynamic.js:', err));
+  });
+}
 </script>
 </html>
