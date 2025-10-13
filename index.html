@@ -2,50 +2,73 @@
 <html lang="en-US" dir="ltr">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <link rel="stylesheet" href="converter.css">
-    <link rel="manifest" href="/manifest.json">
-    <link rel="shortcut icon" href="https://c.s-microsoft.com/favicon.ico?v2" />
-    <title>Temperature converter</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Temperature Converter</title>
+
+    <!-- Estilos -->
+    <link rel="stylesheet" href="converter.css" />
+
+    <!-- Manifest y Favicon -->
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" type="image/png" href="/icon512-nuevo.png" />
   </head>
+
   <body>
-    <form id="converter">
-  <label for="input-temp">temperature</label>
-  <input type="text" id="input-temp" name="input-temp" value="20" />
-  <label for="input-unit">from</label>
-  <select id="input-unit" name="input-unit">
-    <option value="c" selected>Celsius</option>
-    <option value="f">Fahrenheit</option>
-    <option value="k">Kelvin</option>
-  </select>
-  <label for="output-unit">to</label>
-  <select id="output-unit" name="output-unit">
-    <option value="c">Celsius</option>
-    <option value="f" selected>Fahrenheit</option>
-    <option value="k">Kelvin</option>
-  </select>
-  <output name="output-temp" id="output-temp" for="input-temp input-unit output-unit">68 F</output>
+    <!-- 🔸 Formulario del convertidor -->
+    <form id="converter" style="text-align: center; margin-top: 40px;">
+      <label for="input-temp">Temperature</label>
+      <input type="text" id="input-temp" name="input-temp" value="20" />
+
+      <label for="input-unit">From</label>
+      <select id="input-unit" name="input-unit">
+        <option value="c" selected>Celsius</option>
+        <option value="f">Fahrenheit</option>
+        <option value="k">Kelvin</option>
+      </select>
+
+      <label for="output-unit">To</label>
+      <select id="output-unit" name="output-unit">
+        <option value="c">Celsius</option>
+        <option value="f" selected>Fahrenheit</option>
+        <option value="k">Kelvin</option>
+      </select>
+
+      <output 
+        name="output-temp" 
+        id="output-temp" 
+        for="input-temp input-unit output-unit">
+        68 F
+      </output>
+    </form>
+    <form id="contact-form">
+  <h3>Contacto</h3>
+  <label for="name">Nombre:</label><br>
+  <input type="text" id="name" name="name" placeholder="Ingresa tu nombre"><br><br>
+  
+  <label for="message">Mensaje:</label><br>
+  <textarea id="message" name="message" placeholder="Escribe tu mensaje"></textarea><br><br>
+  
+  <button type="submit">Enviar</button>
 </form>
-<script src="converter.js"></script>
+
+
+    <!-- Script principal -->
+    <script src="converter.js"></script>
+
+    <!-- 🔸 Registro de Service Workers -->
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then(reg => console.log('SW principal (cache-first) registrado:', reg.scope))
+            .catch(err => console.error('Error registrando sw.js:', err));
+
+          navigator.serviceWorker.register('/sw-dynamic.js')
+            .then(reg => console.log('SW dinámico (network-first) registrado:', reg.scope))
+            .catch(err => console.error('Error registrando sw-dynamic.js:', err));
+        });
+      }
+    </script>
   </body>
-  <script>
-if('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js', { scope: '/' });
-}
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    // Registrar el SW original (cache-first)
-    navigator.serviceWorker.register('/sw.js')
-      .then(reg => console.log('SW principal (cache-first) registrado:', reg.scope))
-      .catch(err => console.error('Error registrando sw.js:', err));
-
-    // Registrar el nuevo SW dinámico (network-first)
-    navigator.serviceWorker.register('/sw-dynamic.js')
-      .then(reg => console.log('SW dinámico (network-first) registrado:', reg.scope))
-      .catch(err => console.error('Error registrando sw-dynamic.js:', err));
-  });
-}
-
-
-</script>
 </html>
