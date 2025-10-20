@@ -3,24 +3,18 @@ name: CI Node + Trabajo secuencial
 
 on:
   push:
-    branches: [ "main", "master" ]
+    branches: [ "main" ]
   workflow_dispatch:
 
 jobs:
   instalar_node:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Configurar Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
-
-      - name: Verificar Node
-        run: |
+      - run: |
           node -v
           npm -v
 
@@ -28,19 +22,5 @@ jobs:
     needs: instalar_node
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - run: echo "Segundo trabajo ejecutado después de instalar Node."
 
-      - name: Usar Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Tarea de ejemplo
-        run: |
-          echo "Trabajo secuenciado después de instalar Node"
-          if [ -f package.json ]; then
-            npm ci
-            npm run -s build || echo "No hay script build"
-            npm test --if-present
-          fi
