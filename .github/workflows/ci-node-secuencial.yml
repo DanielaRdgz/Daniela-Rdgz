@@ -1,0 +1,46 @@
+# .github/workflows/ci-node-secuencial.yml
+name: CI Node + Trabajo secuencial
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  instalar_node:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Verificar Node
+        run: |
+          node -v
+          npm -v
+
+  trabajo_secundario:
+    needs: instalar_node
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Usar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Tarea de ejemplo
+        run: |
+          echo "Trabajo secuenciado después de instalar Node"
+          if [ -f package.json ]; then
+            npm ci
+            npm run -s build || echo "No hay script build"
+            npm test --if-present
+          fi
